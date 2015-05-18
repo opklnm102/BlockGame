@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="euc-kr" ?> 
+<BlockGame>
+	<Screen>
+		<Size w="800" h="900"></Size>
+	</Screen>
+
+	<GamePanel>
+		<Bg>
+			<Img>images/background1.jpg</Img>
+			<Sound></Sound>
+		</Bg>
+
+		<Block>
+			<Obj x="10" y="30" w="50" h="30" type="1" img="images/block1.png"></Obj>
+			<Obj  x="90" y="30" w="50" h="30" type="2" img="images/block2.png"></Obj>
+			<Obj  x="170" y="30" w="50" h="30" type="3" img="images/block3.png"></Obj>
+			<Obj  x="250" y="30" w="50" h="30" type="4" img="images/block4.png"></Obj>
+			<Obj  x="330" y="30" w="50" h="30" type="5" img="images/block5.png"></Obj>
+			<Obj  x="410" y="30" w="50" h="30" type="6" img="images/block6.png"></Obj>
+			<Obj  x="490" y="30" w="50" h="30" type="7" img="images/block7.png"></Obj>
+			<Obj  x="580" y="30" w="50" h="30" type="8" img="images/block1.png"></Obj>
+		</Block>
+
+		<Item>
+			<Obj x="10" y="500" w="50" h="30" type="1" img="images/item1.png"></Obj>
+			<Obj x="100" y="500" w="50" h="30" type="2" img="images/item2.png"></Obj>
+			<Obj x="200" y="500" w="50" h="30" type="3" img="images/item3.png"></Obj>
+			<Obj x="300" y="500" w="50" h="30" type="4" img="images/item4.png"></Obj>
+			<Obj x="400" y="500" w="50" h="30" type="5" img="images/item5.png"></Obj>
+			<Obj x="500" y="500" w="50" h="30" type="6" img="images/item6.png"></Obj>
+			<Obj x="600" y="500" w="50" h="30" type="7" img="images/item7.png"></Obj>
+			<Obj x="700" y="500" w="50" h="30" type="8" img="images/item8.png"></Obj>
+			<Obj x="10" y="570" w="50" h="30" type="9" img="images/item9.png"></Obj>
+			<Obj x="100" y="570" w="50" h="30" type="10" img="images/item10.png"></Obj>
+		</Item>
+
+		<Ball>
+			<Obj x="400" y="700" w="30" h="30" type="1" img="images/ball.png"></Obj>
+		</Ball>
+
+		<Bar>
+			<Obj x="400" y="750" w="200" h="20" type="1" img="images/bar.png"></Obj>
+		</Bar>
+
+	</GamePanel>
+
+</BlockGame>
+
+
