@@ -18,10 +18,6 @@ public class Block extends JLabel {
 		this.img = icon.getImage();
 	}
 	
-	public void changXY(int x, int y){
-		setLocation(x,y);
-	}
-	
 	public void setImg(String src){
 		icon = new ImageIcon(src);
 		this.img = icon.getImage();
@@ -30,5 +26,9 @@ public class Block extends JLabel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	}
+
+	public int getType() {
+		return type;
 	}
 }
