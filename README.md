@@ -9,7 +9,7 @@ mouse left button -> 공쏘기
 mouse right button -> 메뉴
 mouse 이동 -> bar이동
 
-<Item> -> 랜덤 생성
+Item -> 랜덤 생성
 1. 생명줄
 2. 미사일(랜덤경로) -보류
 3. 자석(bar에 붙는다)
@@ -20,7 +20,7 @@ mouse 이동 -> bar이동
 8. 공분열(4개)
 9. bar길이 증감(+-3)
 
-<Block>
+Block
 1. 생명1
 2. 생명2
 3. 생명3
@@ -32,7 +32,7 @@ mouse 이동 -> bar이동
 9. 폭탄(세로)
 10. 폭탄(범위,마름모)
 
-<Menu> -> Dialog
+Menu -> Dialog
 1. 계속하기
 2. 재시작
 3. 점수관리
