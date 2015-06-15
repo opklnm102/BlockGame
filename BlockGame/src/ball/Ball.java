@@ -6,7 +6,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class Ball extends JLabel{
+public class Ball extends JLabel implements Runnable{
 	Image img;
 	int type;
 	
@@ -17,5 +17,14 @@ public class Ball extends JLabel{
 	
 	public void paintComponent(Graphics g) {
 		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	}
+
+	@Override
+	public void run() {
+		try{
+			
+		}catch(Exception e){
+			
+		}
 	}
 }

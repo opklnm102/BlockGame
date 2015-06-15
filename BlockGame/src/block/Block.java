@@ -8,17 +8,23 @@ import javax.swing.JLabel;
 
 public class Block extends JLabel {
 	Image img;
+	ImageIcon icon;
 	int type;
 
 	public Block(int x, int y, int w, int h, String src, int type) {
 		this.setBounds(x, y, w, h);
 		this.type = type;
-		ImageIcon icon = new ImageIcon(src);
+		icon = new ImageIcon(src);
 		this.img = icon.getImage();
 	}
 	
 	public void changXY(int x, int y){
 		setLocation(x,y);
+	}
+	
+	public void setImg(String src){
+		icon = new ImageIcon(src);
+		this.img = icon.getImage();
 	}
 
 	public void paintComponent(Graphics g) {

@@ -144,8 +144,8 @@ public class BlockGameFrame extends JFrame {
 			String name = selectItem.getText();
 			
 			if(name.equals("On")){
-				editPanel = new EditPanel();
-				setSize(Integer.parseInt(w) + 300, Integer.parseInt(h));
+				editPanel = new EditPanel(Integer.parseInt(w), Integer.parseInt(w));
+				setSize(Integer.parseInt(w) + 300, Integer.parseInt(w) );
 				c.add(editPanel);
 				editOffItem.setEnabled(true);
 				editOnItem.setEnabled(false);

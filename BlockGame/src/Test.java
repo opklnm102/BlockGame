@@ -1,3 +1,4 @@
+
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,15 +11,20 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import makingTool.EditPanel;
+
 public class Test extends JFrame {
 	Container c;
 	JLabel la = new JLabel();
 
 	Test() {
 		c = getContentPane();
+		
+		c.add(new EditPanel(1100, 900));
+		
 
 		createMenu();
-		setSize(300, 300);
+		setSize(1100, 900);
 		setVisible(true);
 	}
 
