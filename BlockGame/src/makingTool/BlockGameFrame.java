@@ -13,6 +13,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.w3c.dom.Node;
@@ -20,6 +22,8 @@ import org.w3c.dom.Node;
 public class BlockGameFrame extends JFrame {
 	Container c;
 	String w, h;
+	JMenuItem editOnItem;
+	JMenuItem editOffItem; 
 
 	public BlockGameFrame(String title) {
 		setTitle(title);
@@ -73,14 +77,32 @@ public class BlockGameFrame extends JFrame {
 		JMenu fileMenu = new JMenu("File");
 		JMenu editMenu = new JMenu("Edit");
 		JMenu runMenu = new JMenu("Run");
-
+		
+		runMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {	
+				System.out.println("run");
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {				
+			}
+		});
+		
+		
 		JMenuItem newItem = new JMenuItem("New");
 		JMenuItem openItem = new JMenuItem("Open");
 		JMenuItem saveItem = new JMenuItem("Save");
 		JMenuItem exitItem = new JMenuItem("Exit");
-
-		JMenuItem editOnItem = new JMenuItem("On");
-		JMenuItem editOffItem = new JMenuItem("Off");
+		
+		editOnItem = new JMenuItem("On");
+		editOffItem = new JMenuItem("Off");
+		editOffItem.setEnabled(false);
 
 		FileActionListener fileMennuListener = new FileActionListener();
 
@@ -125,10 +147,14 @@ public class BlockGameFrame extends JFrame {
 				editPanel = new EditPanel();
 				setSize(Integer.parseInt(w) + 300, Integer.parseInt(h));
 				c.add(editPanel);
+				editOffItem.setEnabled(true);
+				editOnItem.setEnabled(false);
 			}else if(name.equals("Off")){
 				c.remove(editPanel);
 				setSize(Integer.parseInt(w), Integer.parseInt(h));
-				editPanel = null;				
+				editPanel = null;	
+				editOffItem.setEnabled(false);
+				editOnItem.setEnabled(true);
 			}
 		}	
 	}

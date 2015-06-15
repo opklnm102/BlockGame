@@ -14,7 +14,6 @@ import ball.Ball;
 import bar.Bar;
 import block.Block;
 
-
 public class GamePanel extends JPanel {
 	ImageIcon bgImg;
 
@@ -45,8 +44,7 @@ public class GamePanel extends JPanel {
 				int h = Integer.parseInt(XMLReader.getAttr(node, "h"));
 				int type = Integer.parseInt(XMLReader.getAttr(node, "type"));
 
-				ImageIcon icon = new ImageIcon(XMLReader.getAttr(node, "img"));
-				Block block = new Block(x, y, w, h, icon, type);
+				Block block = new Block(x, y, w, h, XMLReader.getAttr(node,"img"), type);
 				add(block);
 			}
 		}
@@ -65,8 +63,7 @@ public class GamePanel extends JPanel {
 				int h = Integer.parseInt(XMLReader.getAttr(node, "h"));
 				int type = Integer.parseInt(XMLReader.getAttr(node, "type"));
 
-				ImageIcon icon = new ImageIcon(XMLReader.getAttr(node, "img"));
-				Item item = new Item(x, y, w, h, icon, type);
+				Item item = new Item(x, y, w, h, XMLReader.getAttr(node, "img"), type);
 				add(item);
 			}
 		}

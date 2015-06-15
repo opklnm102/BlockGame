@@ -10,12 +10,19 @@ public class Block extends JLabel {
 	Image img;
 	int type;
 
-	public Block(int x, int y, int w, int h, ImageIcon icon, int type) {
+	public Block(int x, int y, int w, int h, String src, int type) {
 		this.setBounds(x, y, w, h);
-		img = icon.getImage();
+		this.type = type;
+		ImageIcon icon = new ImageIcon(src);
+		this.img = icon.getImage();
+	}
+	
+	public void changXY(int x, int y){
+		setLocation(x,y);
 	}
 
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 	}
 }
