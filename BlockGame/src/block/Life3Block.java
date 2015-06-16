@@ -4,8 +4,9 @@ import common.Effect;
 
 public class Life3Block  extends Block implements Effect {
 	
-	public Life3Block(int x, int y, int w, int h, String src, int type){
-		super(x, y, w, h, src, type);
+	public Life3Block(int x, int y, int w, int h, String src, String clickSrc,
+			int type){
+		super(x, y, w, h, src, clickSrc, type);
 		
 	}
 

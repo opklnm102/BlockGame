@@ -44,7 +44,7 @@ public class GamePanel extends JPanel {
 				int h = Integer.parseInt(XMLReader.getAttr(node, "h"));
 				int type = Integer.parseInt(XMLReader.getAttr(node, "type"));
 
-				Block block = new Block(x, y, w, h, XMLReader.getAttr(node,"img"), type);
+				Block block = new Block(x, y, w, h, XMLReader.getAttr(node,"img"), XMLReader.getAttr(node,"clickImg"), type);
 				add(block);
 			}
 		}

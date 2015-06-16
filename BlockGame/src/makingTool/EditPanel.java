@@ -1,27 +1,27 @@
 package makingTool;
 
 import java.awt.Color;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.plaf.SplitPaneUI;
+import javax.swing.border.EtchedBorder;
 
 import block.Block;
 
 public class EditPanel extends JPanel {
+	
+	public static String imgSources[] = { "images/block1.png", "images/block2.png",
+		"images/block3.png", "images/block4.png", "images/block5.png",
+		"images/block6.png", "images/block1.png", "images/block2.png",
+		"images/block3.png", "images/block4.png" };
+	
 	Block blocks[];
 	MyMouseListener listener;
 	Block block;
-	int x, y;
 	Block tmp;
 	int check;
 
@@ -43,75 +43,106 @@ public class EditPanel extends JPanel {
 	}
 
 	class MapPanel extends JPanel {
+		ArrayList<Block> blockList;
+		int x, y;
+
 		public MapPanel() {
 			setLayout(null);
 			setSize(800, 900);
+			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED,
+					Color.red, Color.pink));
+
+			blockList = new ArrayList<>();
 
 			addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					System.out.println("pressed");
+					System.out.println("map Click");
 					x = e.getX();
 					y = e.getY();
 					System.out.println(x + " " + y);
 
-					switch (check) {
-					case 1:
-						tmp = new Block(x, y, 50, 30, "images/block1.png", 1);
-						break;
-					case 2:
-						tmp = new Block(x, y, 50, 30, "images/block2.png", 2);
-						break;
-					case 3:
-						tmp = new Block(x, y, 50, 30, "images/block3.png", 3);
-						break;
-					case 4:
-						tmp = new Block(x, y, 50, 30, "images/block4.png", 4);
-						break;
-					case 5:
-						tmp = new Block(x, y, 50, 30, "images/block5.png", 5);
-						break;
-					case 6:
-						tmp = new Block(x, y, 50, 30, "images/block6.png", 6);
-						break;
-					case 7:
-						tmp = new Block(x, y, 50, 30, "images/block7.png", 7);
-						break;
-					case 8:
-						tmp = new Block(x, y, 50, 30, "images/block1.png", 8);
-						break;
-					case 9:
-						tmp = new Block(x, y, 50, 30, "images/block2.png", 9);
-						break;
-					case 10:
-						tmp = new Block(x, y, 50, 30, "images/block3.png", 10);
-						break;
-					}		
-				
-					add(tmp);
-					repaint();
+					if (e.getClickCount() == 2) {  //블 편집 dialog
+						if(isBlockLocation()){
+														
+						}
+
+					} else if (e.getClickCount() == 1) {  //블럭 생성
+						switch (check) {
+						case 1:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 1);
+							break;
+						case 2:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 2);
+							break;
+						case 3:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 3);
+							break;
+						case 4:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 4);
+							break;
+						case 5:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 5);
+							break;
+						case 6:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 6);
+							break;
+						case 7:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 7);
+							break;
+						case 8:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 8);
+							break;
+						case 9:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 9);
+							break;
+						case 10:
+							tmp = new Block(x, y, 50, 30, imgSources[check-1],
+									"images/item1.png", 10);
+							break;
+						}
+
+						blockList.add(tmp);
+						add(tmp);
+						repaint();
+					}
 				}
 			});
 
 			setBackground(Color.gray);
 			setVisible(true);
 		}
+
+		boolean isBlockLocation() {
+			for (int i = 0; i < blockList.size(); i++) {
+				if (blockList.get(i).getX() == x && blockList.get(i).getY() == y)
+					return true;
+			}
+			return false;
+		}
 	}
 
-	class BlockPanel extends JPanel {
-		String imgSources[] = { "images/block1.png", "images/block2.png",
-				"images/block3.png", "images/block4.png", "images/block5.png",
-				"images/block6.png", "images/block1.png", "images/block2.png",
-				"images/block3.png", "images/block4.png" };
+	class BlockPanel extends JPanel {		
 
 		public BlockPanel() {
 			setLayout(null);
 			setBackground(new Color(153, 204, 230));
+			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED,
+					Color.red, Color.pink));
 
 			// 블럭 생성
 			for (int i = 0; i < blocks.length; i++) {
 				blocks[i] = new Block(20, 20 + (i * 50), 50, 30, imgSources[i],
-						i + 1);
+						"images/item1.png", i + 1);
 			}
 
 			// 리스너 설정
@@ -131,14 +162,14 @@ public class EditPanel extends JPanel {
 		}
 	}
 
-	class MyMouseListener extends MouseAdapter {  //더블클릭처리
+	class MyMouseListener extends MouseAdapter { 
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			System.out.println("click");
+			System.out.println("block Click");
 			block = (Block) e.getSource();
 
-			if (check == 0) {  //선택 이미지 넣어 줘야한다.
+			if (check == 0) {
 				System.out.println("check true");
 				switch (block.getType()) {
 				case 1:
@@ -172,7 +203,11 @@ public class EditPanel extends JPanel {
 					check = 10;
 					break;
 				}
+				block.clickChangeImg();
+				repaint();
 			} else {
+				block.clickChangeImg();
+				repaint();
 				check = 0;
 			}
 		}

@@ -4,8 +4,9 @@ import common.Effect;
 
 public class BarSpeedBlock  extends Block implements Effect {
 	
-	public BarSpeedBlock(int x, int y, int w, int h, String src, int type){
-		super(x, y, w, h, src, type);
+	public BarSpeedBlock(int x, int y, int w, int h, String src, String clickSrc,
+			int type){
+		super(x, y, w, h, src, clickSrc, type);
 		
 	}
 

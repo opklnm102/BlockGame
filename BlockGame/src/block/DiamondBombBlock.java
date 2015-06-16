@@ -4,9 +4,9 @@ import common.Effect;
 
 public class DiamondBombBlock  extends Block implements Effect {
 
-	public DiamondBombBlock(int x, int y, int w, int h, String src, int type){
-		super(x, y, w, h, src, type);
-		
+	public DiamondBombBlock(int x, int y, int w, int h, String src, String clickSrc,
+			int type){
+		super(x, y, w, h, src, clickSrc, type);		
 	}
 
 	@Override
