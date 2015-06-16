@@ -4,13 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class StartPanel extends JPanel{
 	
-	public StartPanel(int width, int height){
+	public StartPanel(JFrame frame, int width, int height){
 		setLayout(null);
-		setSize(width, height);
+		setSize(width, height);		
 		
 		JButton gameBtn = new JButton("게임");
 		JButton editBtn = new JButton("편집");
@@ -29,7 +30,10 @@ public class StartPanel extends JPanel{
 		
 		editBtn.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e){ 	
+			public void actionPerformed(ActionEvent e){ 
+		
+				frame.add(new EditPanel(1100, 900));		
+				frame.setSize(1100,900);		
 			}
 		});
 		

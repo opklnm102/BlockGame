@@ -43,9 +43,10 @@ public class EditPanel extends JPanel {
 			"images/block2.png", "images/block3.png", "images/block4.png",
 			"images/block5.png", "images/block6.png", "images/block1.png",
 			"images/block2.png", "images/block3.png" };
-	
-//	public static final String itemName[] = { "생명줄 생성", "미사일", "자석", "관통 볼", "공속도 조절",
-//			"바속도 조절", "공크기 조절", "공 분열", "바길이 조절" };
+
+	// public static final String itemName[] = { "생명줄 생성", "미사일", "자석", "관통 볼",
+	// "공속도 조절",
+	// "바속도 조절", "공크기 조절", "공 분열", "바길이 조절" };
 
 	Block blocks[]; // Block Panel의 블럭 목록
 	BlockCreateListener listener;
@@ -53,16 +54,16 @@ public class EditPanel extends JPanel {
 	Block tmp; // 생성될 블럭
 	int check; // 블럭 선택 여부
 
-	JRadioButton blockRadioBtns[] = new JRadioButton[9];  //블럭 제작용
-	JCheckBox itemCheckBoxs[] = new JCheckBox[9];  //아이템 편집용
-	JRadioButton imgRadioBtns[] = new JRadioButton[9];  //이미지 편집용 
-	
-	//Dialog용
+	JRadioButton blockRadioBtns[] = new JRadioButton[9]; // 블럭 제작용
+	JCheckBox itemCheckBoxs[] = new JCheckBox[9]; // 아이템 편집용
+	JRadioButton imgRadioBtns[] = new JRadioButton[9]; // 이미지 편집용
+
+	// Dialog용
 	BlockEditDialog blockEditDialog;
 	int imgCheck = 0;
 	boolean itemCheck[] = new boolean[9];
-	
-	//Map Panel용
+
+	// Map Panel용
 	ArrayList<Block> blockList;
 	int x, y;
 
@@ -74,16 +75,16 @@ public class EditPanel extends JPanel {
 
 		BlockPanel blockPanel = new BlockPanel();
 		MapPanel mapPanel = new MapPanel();
-		
+
+		blockEditDialog = new BlockEditDialog((JFrame) getParent(), "블록 편집");
+
 		add(blockPanel);
 		add(mapPanel);
-		
-		blockEditDialog = new BlockEditDialog((JFrame)getParent(), "블록 편집");
 
 		setVisible(true);
 	}
 
-	class MapPanel extends JPanel {		
+	class MapPanel extends JPanel {
 		public MapPanel() {
 			setLayout(null);
 			setSize(800, 900);
@@ -103,54 +104,64 @@ public class EditPanel extends JPanel {
 					if (e.getClickCount() == 2) { // 블 편집 dialog
 						System.out.println("map Double Click");
 						if (isBlockLocation()) {
-							//다이얼로그 띄우기
-							//blockEditDialog = new BlockEditDialog((JFrame)getParent(), "블록 편집");
-							
+							// 다이얼로그 띄우기
+
 							blockEditDialog.setVisible(true);
 						}
 					} else if (e.getClickCount() == 1) { // 블럭 생성
 						System.out.println("map Click");
-						switch (check) {
-						case 1:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 1);
-							break;
-						case 2:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 2);
-							break;
-						case 3:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 3);
-							break;
-						case 4:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 4);
-							break;
-						case 5:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 5);
-							break;
-						case 6:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 6);
-							break;
-						case 7:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 7);
-							break;
-						case 8:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 8);
-							break;
-						case 9:
-							tmp = new Block(x, y, 50, 30, blockImg[check - 1],
-									"images/item1.png", 9);
-							break;
+						if (check != 0) {
+							switch (check) {
+							case 1:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 1);
+								break;
+							case 2:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 2);
+								break;
+							case 3:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 3);
+								break;
+							case 4:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 4);
+								break;
+							case 5:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 5);
+								break;
+							case 6:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 6);
+								break;
+							case 7:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 7);
+								break;
+							case 8:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 8);
+								break;
+							case 9:
+								tmp = new Block(x, y, 50, 30,
+										blockImg[check - 1],
+										"images/item1.png", 9);
+								break;
+							}
+							blockList.add(tmp);
+							add(tmp);
+							repaint();
 						}
-						blockList.add(tmp);
-						add(tmp);
-						repaint();
 					}
 				}
 			});
@@ -160,7 +171,7 @@ public class EditPanel extends JPanel {
 		}
 
 		boolean isBlockLocation() {
-			System.out.println("블럭리스트 사이즈 "+blockList.size());
+			System.out.println("블럭리스트 사이즈 " + blockList.size());
 			for (int i = 0; i < blockList.size(); i++) {
 				if (blockList.get(i).getX() == x
 						&& blockList.get(i).getY() == y)
@@ -196,9 +207,9 @@ public class EditPanel extends JPanel {
 				// 툴팁 달기
 
 				blockRadioBtns[i].setBounds(20, 20 + (i * 50), 50, 30);
-				
+
 				blockRadioBtns[i].addItemListener(listener);
-				
+
 				g.add(blockRadioBtns[i]); // 그룹에 추가
 
 				// 패널에 추가
@@ -239,7 +250,7 @@ public class EditPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	class BlockEditDialog extends JDialog {
 		JButton okBtn;
 		JButton closeBtn;
@@ -268,6 +279,15 @@ public class EditPanel extends JPanel {
 					setVisible(false);
 				}
 			});
+
+			closeBtn.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+				}
+			});
+
 		}
 
 		JTabbedPane createTabbedPane() {
@@ -384,10 +404,10 @@ public class EditPanel extends JPanel {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			System.out.println("item Click");
-//			if (e.getStateChange() == ItemEvent.DESELECTED) {
-//				initItemCheck();
-//				return;
-//			}
+			// if (e.getStateChange() == ItemEvent.DESELECTED) {
+			// initItemCheck();
+			// return;
+			// }
 			if (itemCheckBoxs[0].isSelected())
 				itemCheck[0] = true;
 			else
@@ -407,34 +427,34 @@ public class EditPanel extends JPanel {
 				itemCheck[3] = true;
 			else
 				itemCheck[3] = false;
-			
+
 			if (itemCheckBoxs[4].isSelected())
 				itemCheck[4] = true;
 			else
 				itemCheck[4] = false;
-			
+
 			if (itemCheckBoxs[5].isSelected())
 				itemCheck[5] = true;
 			else
 				itemCheck[5] = false;
-			
+
 			if (itemCheckBoxs[6].isSelected())
 				itemCheck[6] = true;
 			else
 				itemCheck[6] = false;
-			
+
 			if (itemCheckBoxs[7].isSelected())
 				itemCheck[7] = true;
 			else
 				itemCheck[7] = false;
-			
+
 			if (itemCheckBoxs[8].isSelected())
 				itemCheck[8] = true;
 			else
 				itemCheck[8] = false;
-			
-//			for(int i=0; i<itemCheck.length; i++)
-//				System.out.println(itemCheck[i]);
+
+			// for(int i=0; i<itemCheck.length; i++)
+			// System.out.println(itemCheck[i]);
 		}
 	}
 

@@ -1,18 +1,22 @@
 package makingTool;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,8 +26,11 @@ import org.w3c.dom.Node;
 public class BlockGameFrame extends JFrame {
 	Container c;
 	String w, h;
-	JMenuItem editOnItem;
-	JMenuItem editOffItem; 
+	JMenuItem editMapItem;
+	MapEditDialog mapEditDoalog;
+	StartPanel startpanel;
+	EditPanel editPanel;
+	
 
 	public BlockGameFrame(String title) {
 		setTitle(title);
@@ -32,11 +39,31 @@ public class BlockGameFrame extends JFrame {
 		c.setLayout(null);
 
 		createMenu();
+		
+		setSize(1100,900);
+		editPanel = new EditPanel(1100, 900);
+		c.add(editPanel);
+		
+//		setSize(800,900);
+//		startpanel = new StartPanel(this,800, 900);
+//		c.add(startpanel);
 
-		defaultFileOpen();
+		//defaultFileOpen();
 
 		// setResizable(false);
 		setVisible(true);
+	}
+	
+//	public static void removeStartPanel(){
+//		c.remove(startpanel);
+//	}
+
+	public void createMapDialog() {
+		mapEditDoalog = new MapEditDialog(this, "Map Edit");
+	}
+
+	public void destroyMapDialog() {
+		mapEditDoalog = null;
 	}
 
 	public void defaultFileOpen() {
@@ -47,8 +74,10 @@ public class BlockGameFrame extends JFrame {
 		h = XMLReader.getAttr(sizeNode, "h");
 		setSize(Integer.parseInt(w), Integer.parseInt(h));
 
-		c.add(new GamePanel(xml.getGamePanelElement(),Integer.parseInt(w), Integer.parseInt(h)));
+		c.add(new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
+				Integer.parseInt(h)));
 
+		repaint();
 		// setContentPane(new GamePanel(xml.getGamePanelElement()));
 	}
 
@@ -62,7 +91,10 @@ public class BlockGameFrame extends JFrame {
 		h = XMLReader.getAttr(sizeNode, "h");
 		setSize(Integer.parseInt(w), Integer.parseInt(h));
 
-		c.add(new GamePanel(xml.getGamePanelElement(),Integer.parseInt(w), Integer.parseInt(h)));
+		c.add(new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
+				Integer.parseInt(h)));
+		
+		repaint();
 		// setContentPane(new GamePanel(xml.getGamePanelElement()));
 	}
 
@@ -77,32 +109,29 @@ public class BlockGameFrame extends JFrame {
 		JMenu fileMenu = new JMenu("File");
 		JMenu editMenu = new JMenu("Edit");
 		JMenu runMenu = new JMenu("Run");
-		
+
 		runMenu.addMenuListener(new MenuListener() {
-			
+
 			@Override
-			public void menuSelected(MenuEvent e) {	
+			public void menuSelected(MenuEvent e) {
 				System.out.println("run");
 			}
-			
+
 			@Override
-			public void menuDeselected(MenuEvent e) {				
+			public void menuDeselected(MenuEvent e) {
 			}
-			
+
 			@Override
-			public void menuCanceled(MenuEvent e) {				
+			public void menuCanceled(MenuEvent e) {
 			}
 		});
-		
-		
+
 		JMenuItem newItem = new JMenuItem("New");
 		JMenuItem openItem = new JMenuItem("Open");
 		JMenuItem saveItem = new JMenuItem("Save");
 		JMenuItem exitItem = new JMenuItem("Exit");
-		
-		editOnItem = new JMenuItem("On");
-		editOffItem = new JMenuItem("Off");
-		editOffItem.setEnabled(false);
+
+		editMapItem = new JMenuItem("Map");
 
 		FileActionListener fileMennuListener = new FileActionListener();
 
@@ -111,9 +140,8 @@ public class BlockGameFrame extends JFrame {
 		exitItem.addActionListener(fileMennuListener);
 
 		EditActionListener editActionListener = new EditActionListener();
-		
-		editOnItem.addActionListener(editActionListener);		
-		editOffItem.addActionListener(editActionListener);
+
+		editMapItem.addActionListener(editActionListener);
 
 		fileMenu.add(newItem);
 		fileMenu.add(openItem);
@@ -121,46 +149,34 @@ public class BlockGameFrame extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(exitItem);
 
-		editMenu.add(editOnItem);
-		editMenu.add(editOffItem);
+		editMenu.add(editMapItem);
 
 		mb.add(fileMenu);
 		mb.add(editMenu);
 		mb.add(runMenu);
 		setJMenuBar(mb);
 	}
-	
-	class EditActionListener implements ActionListener{
+
+	class EditActionListener implements ActionListener {
 		EditPanel editPanel;
-		
-		EditActionListener(){
+
+		EditActionListener() {
 			editPanel = null;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("edit");
-			JMenuItem selectItem = (JMenuItem) e.getSource();
-			String name = selectItem.getText();
-			
-			if(name.equals("On")){
-				editPanel = new EditPanel(Integer.parseInt(w), Integer.parseInt(w));
-				setSize(Integer.parseInt(w) + 300, Integer.parseInt(w) );
-				c.add(editPanel);
-				editOffItem.setEnabled(true);
-				editOnItem.setEnabled(false);
-			}else if(name.equals("Off")){
-				c.remove(editPanel);
-				setSize(Integer.parseInt(w), Integer.parseInt(h));
-				editPanel = null;	
-				editOffItem.setEnabled(false);
-				editOnItem.setEnabled(true);
-			}
-		}	
+
+			// 다이얼로그 삽입
+			createMapDialog();
+			mapEditDoalog.setVisible(true);
+		}
 	}
 
 	class FileActionListener implements ActionListener {
 		JFileChooser chooser;
+		FileNameExtensionFilter filter;
 
 		FileActionListener() {
 			chooser = new JFileChooser();
@@ -174,14 +190,12 @@ public class BlockGameFrame extends JFrame {
 
 			System.out.println(name);
 
-			FileNameExtensionFilter filter = new FileNameExtensionFilter(
-					"XML Files", "xml");
-
-			chooser.setFileFilter(filter);
-
 			if (name.equals("New")) { // default 화면 보여주기
 				defaultFileOpen();
 			} else if (name.equals("Open")) {
+				filter = new FileNameExtensionFilter("XML Files", "xml");
+
+				chooser.setFileFilter(filter);
 				int ret = chooser.showOpenDialog(null);
 
 				if (ret != JFileChooser.APPROVE_OPTION) {
@@ -189,26 +203,160 @@ public class BlockGameFrame extends JFrame {
 							"경고", JOptionPane.WARNING_MESSAGE);
 
 					return;
-				}else{
+				} else {
 					String filePath = chooser.getSelectedFile().getPath();
 					// System.out.println(filePath);
 
 					FileOpen(filePath);
 				}
 			} else if (name.equals("Save")) {
+				filter = new FileNameExtensionFilter("XML Files", "xml");
+
+				chooser.setFileFilter(filter);
+
 				int ret = chooser.showSaveDialog(null);
-				
+
 				if (ret != JFileChooser.APPROVE_OPTION) {
 					JOptionPane.showMessageDialog(null, "파일을 저장하지 않았습니다.",
 							"경고", JOptionPane.WARNING_MESSAGE);
 
 					return;
-				}else{
+				} else {
 					String filePath = chooser.getSelectedFile().getPath();
 					FileSave(filePath);
 				}
 			} else if (name.equals("Exit")) {
 				System.exit(1);
+			}
+		}
+	}
+
+	class MapEditDialog extends JDialog {
+		JButton okBtn;
+		JButton closeBtn;
+		JTextField bgTf;
+		JTextField bgmTf;
+
+		MapEditDialog(JFrame frame, String title) {
+			super(frame, title);
+			setLayout(null);
+			setSize(450, 300);
+
+			okBtn = new JButton("Ok");
+			closeBtn = new JButton("Close");
+
+			// pane.setBounds(10, 10, 410, 450);
+			okBtn.setBounds(280, 224, 66, 25);
+			closeBtn.setBounds(352, 224, 66, 25);
+
+			add(new MapEditPanel());
+			add(okBtn);
+			add(closeBtn); // 리스너 만들기
+
+			okBtn.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					
+					setVisible(false);
+				}
+			});
+
+			closeBtn.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+				}
+			});
+		}
+
+		class MapEditPanel extends JPanel {
+
+			MapEditPanel() {
+				setBounds(10, 10, 410, 210);
+				setLayout(null);
+				setBorder(BorderFactory.createEtchedBorder());
+
+				JLabel bgLa = new JLabel("BG Image");
+				JLabel bgmLa = new JLabel("BGM");
+				bgTf = new JTextField(10);
+				bgmTf = new JTextField(10);
+				JButton bgBtn = new JButton("BG Image");
+				JButton bgmBtn = new JButton("BGM");
+
+				bgLa.setBounds(20, 50, 70, 20);
+				bgmLa.setBounds(20, 110, 70, 20);
+
+				bgTf.setBounds(100, 50, 200, 20);
+				bgmTf.setBounds(100, 110, 200, 20);
+
+				bgBtn.setBounds(310, 50, 40, 20);
+				bgmBtn.setBounds(310, 110, 40, 20);
+
+				bgBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JFileChooser chooser = new JFileChooser();
+						chooser.setCurrentDirectory(new File("."));
+
+						FileNameExtensionFilter filter = new FileNameExtensionFilter(
+								"Image Files", "jpg", "png");
+
+						chooser.setFileFilter(filter);
+
+						int ret = chooser.showSaveDialog(null);
+
+						if (ret != JFileChooser.APPROVE_OPTION) {
+							JOptionPane.showMessageDialog(null,
+									"파일을 저장하지 않았습니다.", "경고",
+									JOptionPane.WARNING_MESSAGE);
+
+							return;
+						} else {
+							String filePath = chooser.getSelectedFile()
+									.getPath();
+							bgTf.setText(filePath);
+						}
+					}
+				});
+
+				bgmBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JFileChooser chooser = new JFileChooser();
+						chooser.setCurrentDirectory(new File("."));
+
+						FileNameExtensionFilter filter = new FileNameExtensionFilter("sound Files",
+								"mp3", "wma");
+
+						chooser.setFileFilter(filter);
+
+						int ret = chooser.showSaveDialog(null);
+
+						if (ret != JFileChooser.APPROVE_OPTION) {
+							JOptionPane.showMessageDialog(null,
+									"파일을 저장하지 않았습니다.", "경고",
+									JOptionPane.WARNING_MESSAGE);
+
+							return;
+						} else {
+							String filePath = chooser.getSelectedFile()
+									.getPath();
+							bgmTf.setText(filePath);
+						}
+					}
+				});
+
+				add(bgLa);
+				add(bgmLa);
+				add(bgTf);
+				add(bgmTf);
+				add(bgBtn);
+				add(bgmBtn);
 			}
 		}
 	}
