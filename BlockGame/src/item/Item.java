@@ -21,4 +21,8 @@ public class Item extends JLabel{
 		super.paintComponent(g);
 		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 	}
+	
+	public int getType() {
+		return type;
+	}
 }

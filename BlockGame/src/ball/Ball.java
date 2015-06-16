@@ -16,6 +16,7 @@ public class Ball extends JLabel implements Runnable{
 	}
 	
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 	}
 

@@ -8,8 +8,9 @@ import javax.swing.JLabel;
 
 public class Block extends JLabel {
 	Image img;
-	ImageIcon normalIcon;
-	ImageIcon clickIcon;
+	Image normalImg;
+	Image clickImg;
+	ImageIcon icon;	
 	int type;
 	boolean isClick;
 
@@ -17,36 +18,39 @@ public class Block extends JLabel {
 			int type) {
 		this.setBounds(x, y, w, h);
 		this.type = type;
-		normalIcon = new ImageIcon(src);
-		clickIcon = new ImageIcon(clickSrc);
-		this.img = normalIcon.getImage();
+		icon = new ImageIcon(src);
+		this.normalImg = icon.getImage();
+		icon = new ImageIcon(clickSrc);
+		this.clickImg = icon.getImage();
+		
 		isClick = false;
+		this.img = normalImg;
 	}
 
 	public Block(int x, int y, int w, int h, String src, int type) {
 		this.setBounds(x, y, w, h);
 		this.type = type;
-		normalIcon = new ImageIcon(src);
-		clickIcon = null;
-		this.img = normalIcon.getImage();
+		icon = new ImageIcon(src);
+		this.normalImg = icon.getImage();
+		clickImg = null;
+		
 		isClick = false;
+		this.img = normalImg;
 	}
 
 	public void setImg(String src) {
-		normalIcon = new ImageIcon(src);
-		this.img = normalIcon.getImage();
+		icon = new ImageIcon(src);
+		this.img = icon.getImage();
 	}
 
 	public void clickChangeImg() {
-		if (clickIcon != null) {
 			if (!isClick) {
 				isClick = true;
-				this.img = clickIcon.getImage();
+				this.img =clickImg;
 			} else {
 				isClick = false;
-				this.img = normalIcon.getImage();
+				this.img = normalImg;
 			}
-		}
 	}
 
 	public void paintComponent(Graphics g) {
