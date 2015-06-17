@@ -1,5 +1,7 @@
 package makingTool;
 
+import gameTool.GamePanel;
+
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +26,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.w3c.dom.Node;
 
 import common.Map;
+import common.StartPanel;
 
 public class BlockGameFrame extends JFrame {
 	static Container c;
@@ -31,26 +34,27 @@ public class BlockGameFrame extends JFrame {
 	JMenuItem editMapItem;
 	MapEditDialog mapEditDoalog;
 	static StartPanel startpanel;
-	EditPanel editPanel;
+	static EditPanel editPanel;
 	Map map;
 	static JFrame frame;
-
-	GamePanel gamePanel;
+	static GamePanel gamePanel;
 
 	static int mode;
-	static boolean isInint = false;
+	boolean isNewCheck = false;
 
 	public BlockGameFrame(String title) {
 		setTitle(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	
 		c = getContentPane();
+		
 		c.setLayout(null);
 
 		createMenu();
 
 		map = new Map();
 		frame = this;
-		
+		System.out.println(c.getName());
 //		setSize(1100, 900);
 //		editPanel = new EditPanel(1100, 900);
 //		c.add(editPanel);
@@ -68,56 +72,72 @@ public class BlockGameFrame extends JFrame {
 	public static void removeStartPanel(int select) {
 		c.remove(startpanel);
 		mode = select;
-		if (mode == 1) { // 게임모드	
+		if (mode == 1) { // 게임모드
+			System.out.println("removeStartPanel gameMode");
+			
+			XMLReader xml = new XMLReader("map1.xml");
+			Node blockGameNode = xml.getBlockGameElement();
+			Node sizeNode = XMLReader.getNode(blockGameNode, XMLReader.E_SIZE);
+			String w = XMLReader.getAttr(sizeNode, "w");
+			String h = XMLReader.getAttr(sizeNode, "h");
+			gamePanel = new GamePanel(xml.getGamePanelElement(), 800, 900);		
+			
+			frame.add(gamePanel);
 			frame.setSize(800, 900);
-			frame.add(new GamePanel(800, 900));			
+			gamePanel.gamePanelRepaint();
 		} else if(mode == 2) { // 편집모드
+			System.out.println("removeStartPanel editMode");
+			editPanel = new EditPanel(1100, 900);
+			frame.add(editPanel);
 			frame.setSize(1100, 900);
-			frame.add(new EditPanel(1100, 900));			
 		}
 	}
 
-	public void defaultFileOpen() {
-		XMLReader xml = new XMLReader("default_screen.xml");
-		Node blockGameNode = xml.getBlockGameElement();
-		Node sizeNode = XMLReader.getNode(blockGameNode, XMLReader.E_SIZE);
-		w = XMLReader.getAttr(sizeNode, "w");
-		h = XMLReader.getAttr(sizeNode, "h");
-		setSize(Integer.parseInt(w), Integer.parseInt(h));
-
+//	public void defaultFileOpen() {
+//		XMLReader xml = new XMLReader("default_screen.xml");
+//		Node blockGameNode = xml.getBlockGameElement();
+//		Node sizeNode = XMLReader.getNode(blockGameNode, XMLReader.E_SIZE);
+//		w = XMLReader.getAttr(sizeNode, "w");
+//		h = XMLReader.getAttr(sizeNode, "h");
+//		setSize(Integer.parseInt(w), Integer.parseInt(h));
+//
 //		c.add(new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
 //				Integer.parseInt(h)));
-
-		repaint();
-		// setContentPane(new GamePanel(xml.getGamePanelElement()));
-	}
+//
+//		repaint();
+//		// setContentPane(new GamePanel(xml.getGamePanelElement()));
+//	}
 
 	public void FileOpen(String filePath) {
 		// defaultFileOpen();
-
-		XMLReader xml = new XMLReader(filePath);
+		
+		XMLReader xml = new XMLReader(filePath);	
 		Node blockGameNode = xml.getBlockGameElement();
 		Node sizeNode = XMLReader.getNode(blockGameNode, XMLReader.E_SIZE);
 		w = XMLReader.getAttr(sizeNode, "w");
 		h = XMLReader.getAttr(sizeNode, "h");
 		// setSize(Integer.parseInt(w), Integer.parseInt(h));
 		
-		if (mode == 1) { // 게임모드	
-			System.out.println(xml.getGamePanelElement());
-			gamePanel.openPanel(xml.getGamePanelElement());
-				
-		} else if(mode == 2) { // 편집모드
-			editPanel = new EditPanel(1100, 900);
-			
-			c.add(editPanel);			
+		System.out.println("file open");
+		System.out.println(mode);
+		if(mode == 1){  //gamePanel Change	
+			gamePanel = new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
+					Integer.parseInt(h));
+			c.add(gamePanel);		
+			gamePanel.gamePanelRepaint();
+		}else if(mode == 2){  //mapPanel Change
+			editPanel.mapPanel =  editPanel.createMapPanel(xml.getGamePanelElement());
+			editPanel.removeMapPanel();
+			c.add(editPanel.mapPanel);
+			editPanel.mapPanel.mapPanelRepaint();
 		}
-		repaint();
+		System.out.println("open End");
+		//repaint();
 		// setContentPane(new GamePanel(xml.getGamePanelElement()));
 	}
 
 	public void FileSave(String filePath) {
 		XMLWriter xml = new XMLWriter(filePath, editPanel.getBlockList(), map);
-
 	}
 
 	public void createMenu() {
@@ -212,7 +232,12 @@ public class BlockGameFrame extends JFrame {
 			System.out.println(name);
 
 			if (name.equals("New")) { // default 화면 보여주기
-				defaultFileOpen();
+//				editPanel.removeMapPanel();
+//				editPanel.mapPanel =  editPanel.createMapPanel(null);				
+//				//c.add(editPanel.mapPanel);
+//				editPanel.mapPanel.mapPanelRepaint();	
+				FileOpen("default_screen.xml");
+				
 			} else if (name.equals("Open")) {
 				filter = new FileNameExtensionFilter("XML Files", "xml");
 
@@ -344,9 +369,8 @@ public class BlockGameFrame extends JFrame {
 
 							return;
 						} else {
-							String filePath = chooser.getSelectedFile()
-									.getPath();
-							bgTf.setText(filePath);
+							String fileName = chooser.getSelectedFile().getName();							
+							bgTf.setText("images/"+fileName);
 						}
 					}
 				});
@@ -372,9 +396,8 @@ public class BlockGameFrame extends JFrame {
 
 							return;
 						} else {
-							String filePath = chooser.getSelectedFile()
-									.getPath();
-							bgmTf.setText(filePath);
+							String fileName = chooser.getSelectedFile().getName();							
+							bgmTf.setText("sounds/"+fileName);
 						}
 					}
 				});

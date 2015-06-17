@@ -1,5 +1,7 @@
 package makingTool;
 
+import item.Item;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -8,6 +10,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
+import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -22,30 +27,39 @@ import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EtchedBorder;
 
-import block.Block;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import ball.Ball;
+import bar.Bar;
+import block.Block;
 import common.Map;
+import common.MapSetting;
 
 public class EditPanel extends JPanel {
 	public static final String itemSelectedImg[] = { "images/block1.png",
 			"images/block2.png", "images/block3.png", "images/block4.png",
-			"images/block5.png", "images/block6.png", "images/block1.png",
-			"images/block2.png", "images/block3.png" };
+			"images/block5.png", "images/block6.png", "images/block7.png",
+			"images/block8.png", "images/block9.png" };
 
 	public static final String itemImg[] = { "images/item1.png",
 			"images/item2.png", "images/item3.png", "images/item4.png",
 			"images/item5.png", "images/item6.png", "images/item7.png",
-			"images/item8.png", "images/item9.png", "images/item10.png" };
+			"images/item8.png", "images/item9.png" };
 
 	public static final String blockSelectedImg[] = { "images/block1.png",
 			"images/block2.png", "images/block3.png", "images/block4.png",
-			"images/block5.png", "images/block6.png", "images/block1.png",
-			"images/block2.png", "images/block3.png" };
+			"images/block5.png", "images/block6.png", "images/block7.png",
+			"images/block8.png", "images/block9.png", "images/block10.png",
+			"images/block11.png", "images/block12.png", "images/block13.png",
+			"images/block14.png" };
 
 	public static final String blockImg[] = { "images/block1.png",
 			"images/block2.png", "images/block3.png", "images/block4.png",
-			"images/block5.png", "images/block6.png", "images/block1.png",
-			"images/block2.png", "images/block3.png" };
+			"images/block5.png", "images/block6.png", "images/block7.png",
+			"images/block8.png", "images/block9.png", "images/block10.png",
+			"images/block11.png", "images/block12.png", "images/block13.png",
+			"images/block14.png" };
 
 	// public static final String itemName[] = { "생명줄 생성", "미사일", "자석", "관통 볼",
 	// "공속도 조절",
@@ -60,7 +74,7 @@ public class EditPanel extends JPanel {
 	BlockPanel blockPanel;
 	MapPanel mapPanel;
 
-	JRadioButton blockRadioBtns[] = new JRadioButton[9]; // 블럭 제작용
+	JRadioButton blockRadioBtns[] = new JRadioButton[14]; // 블럭 제작용
 
 	// Dialog
 	BlockEditDialog blockEditDialog;
@@ -69,14 +83,14 @@ public class EditPanel extends JPanel {
 	int imgCheck = 0;
 	boolean itemCheck[] = new boolean[9];
 	JCheckBox itemCheckBoxs[] = new JCheckBox[9]; // 아이템 편집용
-	JRadioButton imgRadioBtns[] = new JRadioButton[9]; // 이미지 편집용
+	JRadioButton imgRadioBtns[] = new JRadioButton[14]; // 이미지 편집용
 
 	// Map Panel용
 	ArrayList<Block> blockList;
 	int x, y;
 	int blockIdx;
-	
-	public ArrayList<Block> getBlockList(){
+
+	public ArrayList<Block> getBlockList() {
 		return blockList;
 	}
 
@@ -87,7 +101,7 @@ public class EditPanel extends JPanel {
 		blocks = new Block[9];
 
 		blockPanel = new BlockPanel();
-		mapPanel = new MapPanel();
+		mapPanel = new MapPanel(null);
 
 		blockEditDialog = new BlockEditDialog((JFrame) getParent(), "블록 편집");
 
@@ -97,16 +111,119 @@ public class EditPanel extends JPanel {
 		setVisible(true);
 	}
 
-	class MapPanel extends JPanel {
+	public void removeMapPanel() {
+		remove(mapPanel);
+		// repaint();
+	}
+
+	public MapPanel createMapPanel(Node gamePanelNode) {
+		return new MapPanel(gamePanelNode);
+	}
+
+	class MapPanel extends JPanel implements MapSetting {
 		ImageIcon bgImg;
-		
-		public MapPanel() {
+
+		public MapPanel(Node gamePanelNode) {
 			setLayout(null);
 			setSize(800, 900);
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED,
 					Color.red, Color.pink));
 
+			bgImg = new ImageIcon("images/background1.png");
+
 			blockList = new ArrayList<Block>();
+
+			if (gamePanelNode != null) {
+				setting(gamePanelNode);
+			}
+
+			addMouseMotionListener(new MouseMotionAdapter() {
+				@Override
+				public void mouseDragged(MouseEvent e) {
+					System.out.println("map dragged");
+					x = e.getX();
+					y = e.getY();
+					if (!isBlockLocation()) {
+						if (check != 0) {
+							switch (check) {
+							case 1:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 1);
+								break;
+							case 2:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 2);
+								break;
+							case 3:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 3);
+								break;
+							case 4:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 4);
+								break;
+							case 5:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 5);
+								break;
+							case 6:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 6);
+								break;
+							case 7:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 7);
+								break;
+							case 8:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 8);
+								break;
+							case 9:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 9);
+								break;
+							case 10:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 9);
+								break;
+							case 11:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 9);
+								break;
+							case 12:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 9);
+								break;
+							case 13:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 9);
+								break;
+							case 14:
+								tmp = new Block(x, y, 50, 50,
+										blockImg[check - 1],
+										"images/item1.png", 9);
+								break;
+							}
+							blockList.add(tmp);
+							add(tmp);
+							repaint();
+						}
+					}
+				}
+			});
 
 			addMouseListener(new MouseAdapter() {
 
@@ -129,47 +246,72 @@ public class EditPanel extends JPanel {
 							if (check != 0) {
 								switch (check) {
 								case 1:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 1);
 									break;
 								case 2:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 2);
 									break;
 								case 3:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 3);
 									break;
 								case 4:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 4);
 									break;
 								case 5:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 5);
 									break;
 								case 6:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 6);
 									break;
 								case 7:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 7);
 									break;
 								case 8:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 8);
 									break;
 								case 9:
-									tmp = new Block(x, y, 50, 30,
+									tmp = new Block(x, y, 50, 50,
+											blockImg[check - 1],
+											"images/item1.png", 9);
+									break;
+								case 10:
+									tmp = new Block(x, y, 50, 50,
+											blockImg[check - 1],
+											"images/item1.png", 9);
+									break;
+								case 11:
+									tmp = new Block(x, y, 50, 50,
+											blockImg[check - 1],
+											"images/item1.png", 9);
+									break;
+								case 12:
+									tmp = new Block(x, y, 50, 50,
+											blockImg[check - 1],
+											"images/item1.png", 9);
+									break;
+								case 13:
+									tmp = new Block(x, y, 50, 50,
+											blockImg[check - 1],
+											"images/item1.png", 9);
+									break;
+								case 14:
+									tmp = new Block(x, y, 50, 50,
 											blockImg[check - 1],
 											"images/item1.png", 9);
 									break;
@@ -210,7 +352,7 @@ public class EditPanel extends JPanel {
 		// 현재 좌표에 블럭있는지 검사
 		boolean isBlockLocation() {
 			int w = 50;
-			int h = 30;
+			int h = 50;
 
 			System.out.println("블럭리스트 사이즈 " + blockList.size());
 			for (int i = 0; i < blockList.size(); i++) {
@@ -235,8 +377,8 @@ public class EditPanel extends JPanel {
 		public void mapPanelRepaint() {
 			repaint();
 		}
-		
-		public void setMap(Map map){
+
+		public void setMap(Map map) {
 			bgImg = new ImageIcon(map.getBgImg());
 			repaint();
 		}
@@ -244,13 +386,112 @@ public class EditPanel extends JPanel {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			if(bgImg != null){
-			g.drawImage(bgImg.getImage(), 0, 0, this.getWidth(), this.getHeight(),
-					this);
-			}
+			System.out.println(bgImg);
+			g.drawImage(bgImg.getImage(), 0, 0, this.getWidth(),
+					this.getHeight(), this);
 		}
-		
-		
+
+		@Override
+		public void setting(Node gamePanelNode) {
+			Node bgNode = XMLReader.getNode(gamePanelNode, XMLReader.E_BG);
+			Node bgImageNode = XMLReader.getNode(bgNode, XMLReader.E_IMG);
+			Node bgSoundNode = XMLReader.getNode(bgNode, XMLReader.E_SOUND);
+			bgImg = new ImageIcon(bgImageNode.getTextContent());
+			// bgSound = ...? BackGround Sound 넣는곳
+
+			// read <Fish><Obj>s from the XML parse tree, make Food objects, and
+			// add
+			// them to the FishBowl panel.
+			Node blockNode = XMLReader
+					.getNode(gamePanelNode, XMLReader.E_BLOCK);
+			NodeList nodeList = blockNode.getChildNodes();
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node node = nodeList.item(i);
+				if (node.getNodeType() != Node.ELEMENT_NODE)
+					continue;
+				// found!!, <Obj> tag
+				if (node.getNodeName().equals(XMLReader.E_OBJ)) {
+					int x = Integer.parseInt(XMLReader.getAttr(node, "x"));
+					int y = Integer.parseInt(XMLReader.getAttr(node, "y"));
+					int w = Integer.parseInt(XMLReader.getAttr(node, "w"));
+					int h = Integer.parseInt(XMLReader.getAttr(node, "h"));
+					int type = Integer
+							.parseInt(XMLReader.getAttr(node, "type"));
+
+					Block block = new Block(x, y, w, h, XMLReader.getAttr(node,
+							"img"), XMLReader.getAttr(node, "clickImg"), type);
+					blockList.add(block);
+					add(block);
+				}
+			}
+
+			// Node itemNode = XMLReader.getNode(gamePanelNode,
+			// XMLReader.E_ITEM);
+			// nodeList = itemNode.getChildNodes();
+			// for (int i = 0; i < nodeList.getLength(); i++) {
+			// Node node = nodeList.item(i);
+			// if (node.getNodeType() != Node.ELEMENT_NODE)
+			// continue;
+			// // found!!, <Obj> tag
+			// if (node.getNodeName().equals(XMLReader.E_OBJ)) {
+			// int x = Integer.parseInt(XMLReader.getAttr(node, "x"));
+			// int y = Integer.parseInt(XMLReader.getAttr(node, "y"));
+			// int w = Integer.parseInt(XMLReader.getAttr(node, "w"));
+			// int h = Integer.parseInt(XMLReader.getAttr(node, "h"));
+			// int type = Integer
+			// .parseInt(XMLReader.getAttr(node, "type"));
+			//
+			// Item item = new Item(x, y, w, h, XMLReader.getAttr(node,
+			// "img"), type);
+			// add(item);
+			// }
+			// }
+
+			// Node barNode = XMLReader.getNode(gamePanelNode, XMLReader.E_BAR);
+			// nodeList = barNode.getChildNodes();
+			// for (int i = 0; i < nodeList.getLength(); i++) {
+			// Node node = nodeList.item(i);
+			// if (node.getNodeType() != Node.ELEMENT_NODE)
+			// continue;
+			// // found!!, <Obj> tag
+			// if (node.getNodeName().equals(XMLReader.E_OBJ)) {
+			// int x = Integer.parseInt(XMLReader.getAttr(node, "x"));
+			// int y = Integer.parseInt(XMLReader.getAttr(node, "y"));
+			// int w = Integer.parseInt(XMLReader.getAttr(node, "w"));
+			// int h = Integer.parseInt(XMLReader.getAttr(node, "h"));
+			// int type = Integer
+			// .parseInt(XMLReader.getAttr(node, "type"));
+			//
+			// ImageIcon icon = new ImageIcon(XMLReader.getAttr(node,
+			// "img"));
+			// Bar bar = new Bar(x, y, w, h, icon, type);
+			// add(bar);
+			// }
+			// }
+
+			// Node ballNode = XMLReader.getNode(gamePanelNode,
+			// XMLReader.E_BALL);
+			// nodeList = ballNode.getChildNodes();
+			// for (int i = 0; i < nodeList.getLength(); i++) {
+			// Node node = nodeList.item(i);
+			// if (node.getNodeType() != Node.ELEMENT_NODE)
+			// continue;
+			// // found!!, <Obj> tag
+			// if (node.getNodeName().equals(XMLReader.E_OBJ)) {
+			// int x = Integer.parseInt(XMLReader.getAttr(node, "x"));
+			// int y = Integer.parseInt(XMLReader.getAttr(node, "y"));
+			// int w = Integer.parseInt(XMLReader.getAttr(node, "w"));
+			// int h = Integer.parseInt(XMLReader.getAttr(node, "h"));
+			// int type = Integer
+			// .parseInt(XMLReader.getAttr(node, "type"));
+			//
+			// ImageIcon icon = new ImageIcon(XMLReader.getAttr(node,
+			// "img"));
+			// Ball ball = new Ball(x, y, w, h, icon, type);
+			// add(ball);
+			// }
+			// }
+		}
 	}
 
 	class BlockPanel extends JPanel {
@@ -267,7 +508,7 @@ public class EditPanel extends JPanel {
 			listener = new BlockCreateListener();
 
 			// 블럭 추가
-			for (int i = 0; i < 9; i++) {
+			for (int i = 0, locationX = 0, locationY = 0; i < 14; i++) {
 				System.out.println(20 + ", " + (20 + (i * 50)));
 
 				ImageIcon icon = new ImageIcon(blockImg[i]);
@@ -278,7 +519,15 @@ public class EditPanel extends JPanel {
 
 				// 툴팁 달기
 
-				blockRadioBtns[i].setBounds(20, 20 + (i * 50), 50, 30);
+				if (i % 2 == 1) {
+					locationX = 110;
+				} else {
+					locationX = 0;
+					locationY += 70;
+				}
+
+				blockRadioBtns[i].setBounds(60 + locationX, 100 + locationY,
+						50, 50);
 
 				blockRadioBtns[i].addItemListener(listener);
 
@@ -319,6 +568,16 @@ public class EditPanel extends JPanel {
 				check = 8;
 			} else if (blockRadioBtns[8].isSelected()) {
 				check = 9;
+			} else if (blockRadioBtns[9].isSelected()) {
+				check = 10;
+			} else if (blockRadioBtns[10].isSelected()) {
+				check = 11;
+			} else if (blockRadioBtns[11].isSelected()) {
+				check = 12;
+			} else if (blockRadioBtns[12].isSelected()) {
+				check = 13;
+			} else if (blockRadioBtns[13].isSelected()) {
+				check = 14;
 			}
 		}
 	}
@@ -384,8 +643,10 @@ public class EditPanel extends JPanel {
 			ButtonGroup g = new ButtonGroup();
 
 			// 블럭 추가
-			for (int i = 0, h = 0; i < 9; i++) {
-				if (i > 7)
+			for (int i = 0, h = 0; i < 14; i++) {
+				if (i > 11)
+					h = 210;
+				else if (i > 7)
 					h = 140;
 				else if (i > 3)
 					h = 70;
@@ -399,7 +660,7 @@ public class EditPanel extends JPanel {
 
 				// 툴팁 달기
 
-				imgRadioBtns[i].setBounds(20 + 100 * (i % 4), h + 30, 65, 39);
+				imgRadioBtns[i].setBounds(20 + 100 * (i % 4), h + 30, 50, 50);
 
 				imgRadioBtns[i].addItemListener(imgListener);
 
@@ -425,7 +686,8 @@ public class EditPanel extends JPanel {
 
 				ImageIcon icon = new ImageIcon(itemImg[i]);
 				ImageIcon selectedIcon = new ImageIcon(itemSelectedImg[i]);
-				// JCheckBox itemCheckBox = new JCheckBox(itemName[i], icon);
+				// JCheckBox itemCheckBox = new JCheckBox(itemName[i],
+				// icon);
 
 				itemCheckBoxs[i] = new JCheckBox(icon);
 				itemCheckBoxs[i].setBorderPainted(true);
@@ -435,7 +697,7 @@ public class EditPanel extends JPanel {
 
 				System.out.println((20 + 100 * (i % 4)) + ", " + (h + 50));
 
-				itemCheckBoxs[i].setBounds(20 + 100 * (i % 4), h + 30, 65, 39);
+				itemCheckBoxs[i].setBounds(20 + 100 * (i % 4), h + 30, 50, 50);
 
 				itemCheckBoxs[i].addItemListener(itemListener);
 
@@ -472,6 +734,16 @@ public class EditPanel extends JPanel {
 				imgCheck = 7;
 			} else if (imgRadioBtns[8].isSelected()) {
 				imgCheck = 8;
+			} else if (imgRadioBtns[9].isSelected()) {
+				imgCheck = 9;
+			} else if (imgRadioBtns[10].isSelected()) {
+				imgCheck = 10;
+			} else if (imgRadioBtns[11].isSelected()) {
+				imgCheck = 11;
+			} else if (imgRadioBtns[12].isSelected()) {
+				imgCheck = 12;
+			} else if (imgRadioBtns[13].isSelected()) {
+				imgCheck = 13;
 			}
 			System.out.println(imgCheck);
 		}

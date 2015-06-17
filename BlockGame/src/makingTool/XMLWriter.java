@@ -66,7 +66,7 @@ public class XMLWriter {
 							Integer h = currentBlock.getHeight();
 							Integer type = currentBlock.getType();
 							String src = currentBlock.getSrc();
-							
+
 							Element obj = XMLDoc.createElement("Obj");
 							obj.setAttribute("x", x.toString());
 							obj.setAttribute("y", y.toString());
@@ -77,17 +77,39 @@ public class XMLWriter {
 							block.appendChild(obj);
 						}
 					}
+					Element bar = XMLDoc.createElement("Bar");
+					gamePanel.appendChild(bar);
+					{
+						Element obj = XMLDoc.createElement("Obj");
+						obj.setAttribute("x", "400");
+						obj.setAttribute("y", "750");
+						obj.setAttribute("w", "200");
+						obj.setAttribute("h", "20");
+						obj.setAttribute("img", "images/bar.png");
+						bar.appendChild(obj);
+					}
+					Element ball = XMLDoc.createElement("Ball");
+					gamePanel.appendChild(ball);
+					{
+						Element obj = XMLDoc.createElement("Obj");
+						obj.setAttribute("x", "400");
+						obj.setAttribute("y", "710");
+						obj.setAttribute("w", "40");
+						obj.setAttribute("h", "40");
+						obj.setAttribute("img", "images/ball.png");
+						ball.appendChild(obj);
+					}					
 				}
 			}
 
-			// Document Ï†ÄÏû•
+			// Document ¿˙¿Â
 			DOMSource xmlDOM = new DOMSource(XMLDoc);
 			StreamResult xmlFile = new StreamResult(new File(filePath + ".xml"));
 			TransformerFactory.newInstance().newTransformer()
 					.transform(xmlDOM, xmlFile);
 
 		} catch (Exception e) {
-			System.out.println(e + "DOM ÌååÏÑú ÏÉùÏÑ± Ïã§Ìå®");
+			System.out.println(e + "DOM ∆ƒº≠ ª˝º∫ Ω«∆–");
 		}
 	}
 }

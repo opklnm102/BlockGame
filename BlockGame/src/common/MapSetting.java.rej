@@ -1,9 +1,0 @@
-diff a/BlockGame/src/common/MapSetting.java b/BlockGame/src/common/MapSetting.java	(rejected hunks)
-@@ -0,0 +1,7 @@
-+package common;
-+
-+import org.w3c.dom.Node;
-+
-+public interface MapSetting {
-+	void setting(Node gamePanelNode);
-+}
