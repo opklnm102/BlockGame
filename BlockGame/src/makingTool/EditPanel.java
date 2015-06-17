@@ -54,18 +54,28 @@ public class EditPanel extends JPanel {
 	Block tmp; // 생성될 블럭
 	int check; // 블럭 선택 여부
 
-	JRadioButton blockRadioBtns[] = new JRadioButton[9]; // 블럭 제작용
-	JCheckBox itemCheckBoxs[] = new JCheckBox[9]; // 아이템 편집용
-	JRadioButton imgRadioBtns[] = new JRadioButton[9]; // 이미지 편집용
+	BlockPanel blockPanel;
+	MapPanel mapPanel;
 
-	// Dialog용
+	JRadioButton blockRadioBtns[] = new JRadioButton[9]; // 블럭 제작용
+
+	// Dialog
 	BlockEditDialog blockEditDialog;
+	ImagePanel imagePanel;
+	ItemPanel itemPanel;
 	int imgCheck = 0;
 	boolean itemCheck[] = new boolean[9];
+	JCheckBox itemCheckBoxs[] = new JCheckBox[9]; // 아이템 편집용
+	JRadioButton imgRadioBtns[] = new JRadioButton[9]; // 이미지 편집용
 
 	// Map Panel용
 	ArrayList<Block> blockList;
 	int x, y;
+	int blockIdx;
+	
+	public ArrayList<Block> getBlockList(){
+		return blockList;
+	}
 
 	public EditPanel(int width, int height) {
 		setLayout(null);
@@ -73,8 +83,8 @@ public class EditPanel extends JPanel {
 
 		blocks = new Block[9];
 
-		BlockPanel blockPanel = new BlockPanel();
-		MapPanel mapPanel = new MapPanel();
+		blockPanel = new BlockPanel();
+		mapPanel = new MapPanel();
 
 		blockEditDialog = new BlockEditDialog((JFrame) getParent(), "블록 편집");
 
@@ -94,6 +104,79 @@ public class EditPanel extends JPanel {
 			blockList = new ArrayList<Block>();
 
 			addMouseListener(new MouseAdapter() {
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					x = e.getX();
+					y = e.getY();
+					if (e.getButton() == MouseEvent.BUTTON3) { // 오른쪽 버튼, 블럭 삭제
+						System.out.println("map right pressed");
+						if (isBlockLocation()) {
+							mapPanel.remove(blockList.get(blockIdx));
+							blockList.remove(blockIdx);
+							mapPanel.repaint();
+							System.out.println("삭제 후 리스트 사이즈"
+									+ blockList.size());
+						}
+					} else if (e.getButton() == MouseEvent.BUTTON1) { // 왼쪽 버튼,
+						System.out.println("map left pressed");
+						if (!isBlockLocation()) {
+							if (check != 0) {
+								switch (check) {
+								case 1:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 1);
+									break;
+								case 2:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 2);
+									break;
+								case 3:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 3);
+									break;
+								case 4:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 4);
+									break;
+								case 5:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 5);
+									break;
+								case 6:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 6);
+									break;
+								case 7:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 7);
+									break;
+								case 8:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 8);
+									break;
+								case 9:
+									tmp = new Block(x, y, 50, 30,
+											blockImg[check - 1],
+											"images/item1.png", 9);
+									break;
+								}
+								blockList.add(tmp);
+								add(tmp);
+								repaint();
+							}
+						}
+					}
+				}
+
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					x = e.getX();
@@ -101,66 +184,15 @@ public class EditPanel extends JPanel {
 					System.out.println(x + " " + y);
 					System.out.println(check);
 
-					if (e.getClickCount() == 2) { // 블 편집 dialog
+					if (e.getClickCount() == 2) { // 블 편집 Dialog
 						System.out.println("map Double Click");
 						if (isBlockLocation()) {
 							// 다이얼로그 띄우기
 
+							// 해당 블록의 이미지는 선택해놓는다.
+							imgRadioBtns[check - 1].setSelected(true);
+
 							blockEditDialog.setVisible(true);
-						}
-					} else if (e.getClickCount() == 1) { // 블럭 생성
-						System.out.println("map Click");
-						if (check != 0) {
-							switch (check) {
-							case 1:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 1);
-								break;
-							case 2:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 2);
-								break;
-							case 3:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 3);
-								break;
-							case 4:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 4);
-								break;
-							case 5:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 5);
-								break;
-							case 6:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 6);
-								break;
-							case 7:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 7);
-								break;
-							case 8:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 8);
-								break;
-							case 9:
-								tmp = new Block(x, y, 50, 30,
-										blockImg[check - 1],
-										"images/item1.png", 9);
-								break;
-							}
-							blockList.add(tmp);
-							add(tmp);
-							repaint();
 						}
 					}
 				}
@@ -170,14 +202,33 @@ public class EditPanel extends JPanel {
 			setVisible(true);
 		}
 
+		// 현재 좌표에 블럭있는지 검사
 		boolean isBlockLocation() {
+			int w = 50;
+			int h = 30;
+
 			System.out.println("블럭리스트 사이즈 " + blockList.size());
 			for (int i = 0; i < blockList.size(); i++) {
-				if (blockList.get(i).getX() == x
-						&& blockList.get(i).getY() == y)
+				int oldX = blockList.get(i).getX();
+				int oldY = blockList.get(i).getY();
+
+				if (((oldX <= x && x <= oldX + w) && (oldY <= y + h && y + h <= oldY
+						+ h))
+						|| ((oldX <= x && x <= oldX + w) && (oldY <= y && y <= oldY
+								+ h))
+						|| ((oldX <= x + w && x + w <= oldX + w) && (oldY <= y
+								+ h && y + h <= oldY + h))
+						|| ((oldX <= x + w && x + w <= oldX + w) && (oldY <= y && y <= oldY
+								+ h))) {
+					blockIdx = i;
 					return true;
+				}
 			}
 			return false;
+		}
+
+		public void MapPanelRepaint() {
+			repaint();
 		}
 	}
 
@@ -276,6 +327,9 @@ public class EditPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					// 선택된 이미지로 변경
+					blockList.get(blockIdx).setImg(blockImg[imgCheck]);
+					mapPanel.repaint();
 					setVisible(false);
 				}
 			});
@@ -291,9 +345,11 @@ public class EditPanel extends JPanel {
 		}
 
 		JTabbedPane createTabbedPane() {
+			imagePanel = new ImagePanel();
+			itemPanel = new ItemPanel();
 			JTabbedPane pane = new JTabbedPane();
-			pane.addTab("Image", new ImagePanel());
-			pane.addTab("Item", new ItemPanel());
+			pane.addTab("Image", imagePanel);
+			pane.addTab("Item", itemPanel);
 
 			return pane;
 		}
@@ -367,38 +423,40 @@ public class EditPanel extends JPanel {
 		}
 	}
 
+	// Dialog Listener
 	class ImgCheckListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			System.out.println("image Click");
 			if (e.getStateChange() == ItemEvent.DESELECTED) {
-				imgCheck = 0;
+				imgCheck = -1;
 				return;
 			}
 			if (imgRadioBtns[0].isSelected()) {
-				imgCheck = 1;
+				imgCheck = 0;
 			} else if (imgRadioBtns[1].isSelected()) {
-				imgCheck = 2;
+				imgCheck = 1;
 			} else if (imgRadioBtns[2].isSelected()) {
-				imgCheck = 3;
+				imgCheck = 2;
 			} else if (imgRadioBtns[3].isSelected()) {
-				imgCheck = 4;
+				imgCheck = 3;
 			} else if (imgRadioBtns[4].isSelected()) {
-				imgCheck = 5;
+				imgCheck = 4;
 			} else if (imgRadioBtns[5].isSelected()) {
-				imgCheck = 6;
+				imgCheck = 5;
 			} else if (imgRadioBtns[6].isSelected()) {
-				imgCheck = 7;
+				imgCheck = 6;
 			} else if (imgRadioBtns[7].isSelected()) {
-				imgCheck = 8;
+				imgCheck = 7;
 			} else if (imgRadioBtns[8].isSelected()) {
-				imgCheck = 9;
+				imgCheck = 8;
 			}
 			System.out.println(imgCheck);
 		}
 	}
 
+	// Dialog Listener
 	class ItemCheckListener implements ItemListener {
 
 		@Override

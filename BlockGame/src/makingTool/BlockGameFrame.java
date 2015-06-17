@@ -23,15 +23,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.w3c.dom.Node;
 
+import common.Map;
+
 public class BlockGameFrame extends JFrame {
-	Container c;
+	static Container c;
 	String w, h;
 	JMenuItem editMapItem;
 	MapEditDialog mapEditDoalog;
-	StartPanel startpanel;
+	static StartPanel startpanel;
 	EditPanel editPanel;
+	Map map;
 	
-
 	public BlockGameFrame(String title) {
 		setTitle(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -54,16 +56,8 @@ public class BlockGameFrame extends JFrame {
 		setVisible(true);
 	}
 	
-//	public static void removeStartPanel(){
-//		c.remove(startpanel);
-//	}
-
-	public void createMapDialog() {
-		mapEditDoalog = new MapEditDialog(this, "Map Edit");
-	}
-
-	public void destroyMapDialog() {
-		mapEditDoalog = null;
+	public static void removeStartPanel(){
+		c.remove(startpanel);
 	}
 
 	public void defaultFileOpen() {
@@ -99,7 +93,8 @@ public class BlockGameFrame extends JFrame {
 	}
 
 	public void FileSave(String filePath) {
-		XMLWriter xml = new XMLWriter(filePath);
+		XMLWriter xml = new XMLWriter(filePath, editPanel.getBlockList(), map);
+		
 	}
 
 	public void createMenu() {
@@ -158,11 +153,6 @@ public class BlockGameFrame extends JFrame {
 	}
 
 	class EditActionListener implements ActionListener {
-		EditPanel editPanel;
-
-		EditActionListener() {
-			editPanel = null;
-		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -172,6 +162,14 @@ public class BlockGameFrame extends JFrame {
 			createMapDialog();
 			mapEditDoalog.setVisible(true);
 		}
+	}
+	
+	public void createMapDialog() {
+		mapEditDoalog = new MapEditDialog(this, "Map Edit");
+	}
+
+	public void destroyMapDialog() {
+		mapEditDoalog = null;
 	}
 
 	class FileActionListener implements ActionListener {
@@ -257,7 +255,11 @@ public class BlockGameFrame extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					String bgFilePath = bgTf.getText().toString();
+					String bgmFilePath = bgmTf.getText().toString();
 					
+					System.out.println(bgFilePath +", "+ bgmFilePath);
+					map = new Map(bgFilePath, bgmFilePath);
 					
 					setVisible(false);
 				}
