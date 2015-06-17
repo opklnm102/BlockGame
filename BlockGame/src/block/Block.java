@@ -11,6 +11,7 @@ public class Block extends JLabel {
 	Image normalImg;
 	Image clickImg;
 	ImageIcon icon;	
+	String src;
 	int type;
 	boolean isClick;
 
@@ -18,6 +19,7 @@ public class Block extends JLabel {
 			int type) {
 		this.setBounds(x, y, w, h);
 		this.type = type;
+		this.src = src;
 		icon = new ImageIcon(src);
 		this.normalImg = icon.getImage();
 		icon = new ImageIcon(clickSrc);
@@ -30,6 +32,7 @@ public class Block extends JLabel {
 	public Block(int x, int y, int w, int h, String src, int type) {
 		this.setBounds(x, y, w, h);
 		this.type = type;
+		this.src = src;
 		icon = new ImageIcon(src);
 		this.normalImg = icon.getImage();
 		clickImg = null;
@@ -60,5 +63,9 @@ public class Block extends JLabel {
 
 	public int getType() {
 		return type;
+	}
+	
+	public String getSrc(){
+		return src;
 	}
 }

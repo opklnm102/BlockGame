@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="javax.swing.JMenu"/>
 <fullyQualifiedTypeName name="javax.swing.JFileChooser"/>
 <fullyQualifiedTypeName name="javax.swing.filechooser.FileNameExtensionFilter"/>
 <fullyQualifiedTypeName name="Test.OpenActionListener"/>
@@ -56,8 +55,9 @@
 <fullyQualifiedTypeName name="makingTool.StartPanel"/>
 <fullyQualifiedTypeName name="javax.swing.JFrame"/>
 <fullyQualifiedTypeName name="java.awt.event.MouseEvent"/>
-<fullyQualifiedTypeName name="block.Block"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="makingTool.BlockGameFrame"/>
+<fullyQualifiedTypeName name="javax.xml.transform.OutputKeys"/>
+<fullyQualifiedTypeName name="block.Block"/>
 <fullyQualifiedTypeName name="common.Map"/>
 </qualifiedTypeNameHistroy>

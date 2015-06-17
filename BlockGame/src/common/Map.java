@@ -3,6 +3,11 @@ package common;
 public class Map {
 	String bgImg;
 	String bgSound;
+	
+	public Map() {
+		this.bgImg = "";
+		this.bgSound = "";
+	}
 
 	public String getBgImg() {
 		return bgImg;

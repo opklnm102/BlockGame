@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -18,72 +20,74 @@ import common.Map;
 
 public class XMLWriter {
 	private Document XMLDoc;
-	
-	public XMLWriter(String filePath, ArrayList<Block> blockList, Map map){
-		
-		try{
-		XMLDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-	
-		Node root = XMLDoc.createElement("BlockGame");
-		XMLDoc.appendChild(root);
-		    {
-		        Element people1 = XMLDoc.createElement("employee");
-		        people1.setAttribute("id", "1");
-		        people1.setAttribute("part", "devlopment");
-		        root.appendChild(people1);
-		        {
-		            Element name = XMLDoc.createElement("name");
-		            name.appendChild(XMLDoc.createTextNode("Gildong Hong"));
-		            people1.appendChild(name);
-		        }
-		        {
-		            Element age = XMLDoc.createElement("age");
-		            age.appendChild(XMLDoc.createTextNode("25"));
-		            people1.appendChild(age);
-		        }
-		    }
-		 
-		// Document ÀúÀå
-		DOMSource xmlDOM = new DOMSource(XMLDoc);
-		StreamResult xmlFile = new StreamResult(new File(filePath));
-		TransformerFactory.newInstance().newTransformer().transform(xmlDOM, xmlFile);
-		 	
-		}catch(Exception e){
-			System.out.println(e + "DOM ÆÄ¼­ »ý¼º ½ÇÆÐ");
+
+	public XMLWriter(String filePath, ArrayList<Block> blockList, Map map) {
+
+		try {
+			XMLDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+					.newDocument();
+
+			Node root = XMLDoc.createElement("BlockGame");
+			XMLDoc.appendChild(root);
+			{
+				Element screen = XMLDoc.createElement("Screen");
+				root.appendChild(screen);
+				{
+					Element size = XMLDoc.createElement("Size");
+					size.setAttribute("w", "800");
+					size.setAttribute("h", "900");
+					screen.appendChild(size);
+				}
+
+				Element gamePanel = XMLDoc.createElement("GamePanel");
+				root.appendChild(gamePanel);
+				{
+					Element bg = XMLDoc.createElement("Bg");
+					gamePanel.appendChild(bg);
+					{
+						Element img = XMLDoc.createElement("Img");
+						img.appendChild(XMLDoc.createTextNode(map.getBgImg()));
+						bg.appendChild(img);
+					}
+					{
+						Element sound = XMLDoc.createElement("Sound");
+						sound.appendChild(XMLDoc.createTextNode(map
+								.getBgSound()));
+						bg.appendChild(sound);
+					}
+					Element block = XMLDoc.createElement("Block");
+					gamePanel.appendChild(block);
+					{
+						for (int i = 0; i < blockList.size(); i++) {
+							Block currentBlock = blockList.get(i);
+							Integer x = currentBlock.getX();
+							Integer y = currentBlock.getY();
+							Integer w = currentBlock.getWidth();
+							Integer h = currentBlock.getHeight();
+							Integer type = currentBlock.getType();
+							String src = currentBlock.getSrc();
+							
+							Element obj = XMLDoc.createElement("Obj");
+							obj.setAttribute("x", x.toString());
+							obj.setAttribute("y", y.toString());
+							obj.setAttribute("w", w.toString());
+							obj.setAttribute("h", h.toString());
+							obj.setAttribute("type", type.toString());
+							obj.setAttribute("img", src);
+							block.appendChild(obj);
+						}
+					}
+				}
+			}
+
+			// Document ì €ìž¥
+			DOMSource xmlDOM = new DOMSource(XMLDoc);
+			StreamResult xmlFile = new StreamResult(new File(filePath + ".xml"));
+			TransformerFactory.newInstance().newTransformer()
+					.transform(xmlDOM, xmlFile);
+
+		} catch (Exception e) {
+			System.out.println(e + "DOM íŒŒì„œ ìƒì„± ì‹¤íŒ¨");
 		}
 	}
 }
-
-//<jcompany>
-//<employee id="1" part="devlopment">
-//    <name>Gildong Hong</name>
-//    <age>25</age>
-//</employee>
-//</jcompany>
-//
-//
-////Document¹× XMLÆ®¸® »ý¼º
-//Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-//Node root = document.createElement("JCompany");
-//document.appendChild(root);
-// {
-//     Element people1 = document.createElement("employee");
-//     people1.setAttribute("id", "1");
-//     people1.setAttribute("part", "devlopment");
-//     root.appendChild(people1);
-//     {
-//         Element name = document.createElement("name");
-//         name.appendChild(document.createTextNode("Gildong Hong"));
-//         people1.appendChild(name);
-//     }
-//     {
-//         Element age = document.createElement("age");
-//         age.appendChild(document.createTextNode("25"));
-//         people1.appendChild(age);
-//     }
-// }
-//
-////Document ÀúÀå
-//DOMSource xmlDOM = new DOMSource(document);
-//StreamResult xmlFile = new StreamResult(new File("saved.xml"));
-//TransformerFactory.newInstance().newTransformer().transform(xmlDOM, xmlFile);

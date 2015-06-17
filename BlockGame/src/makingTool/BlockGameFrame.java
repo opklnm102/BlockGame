@@ -42,6 +42,8 @@ public class BlockGameFrame extends JFrame {
 
 		createMenu();
 		
+		map = new Map();
+		
 		setSize(1100,900);
 		editPanel = new EditPanel(1100, 900);
 		c.add(editPanel);
@@ -259,7 +261,8 @@ public class BlockGameFrame extends JFrame {
 					String bgmFilePath = bgmTf.getText().toString();
 					
 					System.out.println(bgFilePath +", "+ bgmFilePath);
-					map = new Map(bgFilePath, bgmFilePath);
+					map.setBgImg(bgFilePath);
+					map.setBgSound(bgmFilePath);
 					
 					setVisible(false);
 				}
