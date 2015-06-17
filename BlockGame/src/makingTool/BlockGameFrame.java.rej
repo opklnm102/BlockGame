@@ -1,0 +1,15 @@
+diff a/BlockGame/src/makingTool/BlockGameFrame.java b/BlockGame/src/makingTool/BlockGameFrame.java	(rejected hunks)
+@@ -33,7 +33,12 @@
+ 	static StartPanel startpanel;
+ 	EditPanel editPanel;
+ 	Map map;
+-	
++	static JFrame frame;
++
++	GamePanel gamePanel;
++
++	static int mode;
++
+ 	public BlockGameFrame(String title) {
+ 		setTitle(title);
+ 		setDefaultCloseOperation(EXIT_ON_CLOSE);
