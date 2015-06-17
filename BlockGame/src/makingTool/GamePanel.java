@@ -11,7 +11,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import common.MapSetting;
-
 import ball.Ball;
 import bar.Bar;
 import block.Block;
@@ -19,15 +18,27 @@ import block.Block;
 public class GamePanel extends JPanel implements MapSetting{
 	ImageIcon bgImg;
 
-	public GamePanel(Node gamePanelNode, int width, int height) {
+	public GamePanel(int width, int height) {
 		setLayout(null);
-		setSize(width, height);
+		//setSize(800, 900);
 		
-
+		XMLReader xml = new XMLReader("default_screen.xml");
+		Node blockGameNode = xml.getBlockGameElement();
+		Node sizeNode = XMLReader.getNode(blockGameNode, XMLReader.E_SIZE);
+		
+		String w = XMLReader.getAttr(sizeNode, "w");
+		String h = XMLReader.getAttr(sizeNode, "h");
+		setSize(Integer.parseInt(w), Integer.parseInt(h));
+		
+		Node gamePanelNode = xml.getGamePanelElement();
+		
 		setting(gamePanelNode);		
 		
-		
 		setVisible(true);
+	}
+	
+	public void openPanel(Node gamePanelNode){
+		setting(gamePanelNode);		
 	}
 
 	// BackGround Images ±×¸®±â

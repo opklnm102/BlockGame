@@ -38,6 +38,7 @@ public class BlockGameFrame extends JFrame {
 	GamePanel gamePanel;
 
 	static int mode;
+	static boolean isInint = false;
 
 	public BlockGameFrame(String title) {
 		setTitle(title);
@@ -50,13 +51,13 @@ public class BlockGameFrame extends JFrame {
 		map = new Map();
 		frame = this;
 		
-		setSize(1100, 900);
-		editPanel = new EditPanel(1100, 900);
-		c.add(editPanel);
+//		setSize(1100, 900);
+//		editPanel = new EditPanel(1100, 900);
+//		c.add(editPanel);
 
-		// setSize(800,900);
-		// startpanel = new StartPanel(this,800, 900);
-		// c.add(startpanel);
+		 setSize(800,900);
+		 startpanel = new StartPanel(this,800, 900);
+		 c.add(startpanel);
 
 		// defaultFileOpen();
 
@@ -67,12 +68,12 @@ public class BlockGameFrame extends JFrame {
 	public static void removeStartPanel(int select) {
 		c.remove(startpanel);
 		mode = select;
-		if (mode == 1) { // 게임모드
-			frame.add(new GamePanel(800, 900));
+		if (mode == 1) { // 게임모드	
 			frame.setSize(800, 900);
+			frame.add(new GamePanel(800, 900));			
 		} else if(mode == 2) { // 편집모드
-			frame.add(new EditPanel(1100, 900));
 			frame.setSize(1100, 900);
+			frame.add(new EditPanel(1100, 900));			
 		}
 	}
 
@@ -84,8 +85,8 @@ public class BlockGameFrame extends JFrame {
 		h = XMLReader.getAttr(sizeNode, "h");
 		setSize(Integer.parseInt(w), Integer.parseInt(h));
 
-		c.add(new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
-				Integer.parseInt(h)));
+//		c.add(new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
+//				Integer.parseInt(h)));
 
 		repaint();
 		// setContentPane(new GamePanel(xml.getGamePanelElement()));
@@ -100,10 +101,16 @@ public class BlockGameFrame extends JFrame {
 		w = XMLReader.getAttr(sizeNode, "w");
 		h = XMLReader.getAttr(sizeNode, "h");
 		// setSize(Integer.parseInt(w), Integer.parseInt(h));
-
-		c.add(new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
-				Integer.parseInt(h)));
-
+		
+		if (mode == 1) { // 게임모드	
+			System.out.println(xml.getGamePanelElement());
+			gamePanel.openPanel(xml.getGamePanelElement());
+				
+		} else if(mode == 2) { // 편집모드
+			editPanel = new EditPanel(1100, 900);
+			
+			c.add(editPanel);			
+		}
 		repaint();
 		// setContentPane(new GamePanel(xml.getGamePanelElement()));
 	}
