@@ -10,18 +10,34 @@ import javax.swing.JPanel;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import common.MapSetting;
+
 import ball.Ball;
 import bar.Bar;
 import block.Block;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements MapSetting{
 	ImageIcon bgImg;
 
 	public GamePanel(Node gamePanelNode, int width, int height) {
 		setLayout(null);
 		setSize(width, height);
-		setVisible(true);
+		
 
+		setting(gamePanelNode);		
+		
+		
+		setVisible(true);
+	}
+
+	// BackGround Images 그리기
+	public void paintComponent(Graphics g) {
+		g.drawImage(bgImg.getImage(), 0, 0, this.getWidth(), this.getHeight(),
+				this);
+	}
+
+	@Override
+	public void setting(Node gamePanelNode) {
 		Node bgNode = XMLReader.getNode(gamePanelNode, XMLReader.E_BG);
 		Node bgImageNode = XMLReader.getNode(bgNode, XMLReader.E_IMG);
 		Node bgSoundNode = XMLReader.getNode(bgNode, XMLReader.E_SOUND);
@@ -83,7 +99,7 @@ public class GamePanel extends JPanel {
 				int type = Integer.parseInt(XMLReader.getAttr(node, "type"));
 
 				ImageIcon icon = new ImageIcon(XMLReader.getAttr(node, "img"));
-				Bar bar = new Bar(x, y, w, h, icon, type);
+				Bar bar = new Bar(x, y,  w, h, icon, type);
 				add(bar);
 			}
 		}
@@ -107,11 +123,6 @@ public class GamePanel extends JPanel {
 				add(ball);
 			}
 		}
-	}
-
-	// BackGround Images 그리기
-	public void paintComponent(Graphics g) {
-		g.drawImage(bgImg.getImage(), 0, 0, this.getWidth(), this.getHeight(),
-				this);
+		
 	}
 }

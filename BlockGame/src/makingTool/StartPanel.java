@@ -24,16 +24,14 @@ public class StartPanel extends JPanel{
 		gameBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){ 	
-				
+				BlockGameFrame.removeStartPanel(1);				
 			}
 		});
 		
 		editBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){ 
-				BlockGameFrame.removeStartPanel();
-				frame.add(new EditPanel(1100, 900));		
-				frame.setSize(1100,900);		
+				BlockGameFrame.removeStartPanel(2);				
 			}
 		});
 		

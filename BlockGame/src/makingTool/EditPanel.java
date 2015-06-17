@@ -1,6 +1,7 @@
 package makingTool;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -22,6 +23,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.EtchedBorder;
 
 import block.Block;
+
+import common.Map;
 
 public class EditPanel extends JPanel {
 	public static final String itemSelectedImg[] = { "images/block1.png",
@@ -95,6 +98,8 @@ public class EditPanel extends JPanel {
 	}
 
 	class MapPanel extends JPanel {
+		ImageIcon bgImg;
+		
 		public MapPanel() {
 			setLayout(null);
 			setSize(800, 900);
@@ -227,9 +232,25 @@ public class EditPanel extends JPanel {
 			return false;
 		}
 
-		public void MapPanelRepaint() {
+		public void mapPanelRepaint() {
 			repaint();
 		}
+		
+		public void setMap(Map map){
+			bgImg = new ImageIcon(map.getBgImg());
+			repaint();
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			if(bgImg != null){
+			g.drawImage(bgImg.getImage(), 0, 0, this.getWidth(), this.getHeight(),
+					this);
+			}
+		}
+		
+		
 	}
 
 	class BlockPanel extends JPanel {

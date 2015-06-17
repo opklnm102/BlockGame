@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="javax.swing.JFileChooser"/>
-<fullyQualifiedTypeName name="javax.swing.filechooser.FileNameExtensionFilter"/>
-<fullyQualifiedTypeName name="Test.OpenActionListener"/>
 <fullyQualifiedTypeName name="javax.swing.JMenuItem"/>
 <fullyQualifiedTypeName name="makingTool.BlockGameFrame.FileActionListener"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
@@ -38,7 +35,6 @@
 <fullyQualifiedTypeName name="java.awt.FlowLayout"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
 <fullyQualifiedTypeName name="makingTool.EditPanel"/>
-<fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
 <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
 <fullyQualifiedTypeName name="javax.swing.JCheckBox"/>
 <fullyQualifiedTypeName name="javax.swing.JRadioButton"/>
@@ -59,5 +55,9 @@
 <fullyQualifiedTypeName name="makingTool.BlockGameFrame"/>
 <fullyQualifiedTypeName name="javax.xml.transform.OutputKeys"/>
 <fullyQualifiedTypeName name="block.Block"/>
+<fullyQualifiedTypeName name="java.awt.Image"/>
 <fullyQualifiedTypeName name="common.Map"/>
+<fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
+<fullyQualifiedTypeName name="common.MapSetting"/>
+<fullyQualifiedTypeName name="makingTool.GamePanel"/>
 </qualifiedTypeNameHistroy>

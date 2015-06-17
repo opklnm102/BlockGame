@@ -33,7 +33,12 @@ public class BlockGameFrame extends JFrame {
 	static StartPanel startpanel;
 	EditPanel editPanel;
 	Map map;
-	
+	static JFrame frame;
+
+	GamePanel gamePanel;
+
+	static int mode;
+
 	public BlockGameFrame(String title) {
 		setTitle(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -41,25 +46,34 @@ public class BlockGameFrame extends JFrame {
 		c.setLayout(null);
 
 		createMenu();
-		
+
 		map = new Map();
+		frame = this;
 		
-		setSize(1100,900);
+		setSize(1100, 900);
 		editPanel = new EditPanel(1100, 900);
 		c.add(editPanel);
-		
-//		setSize(800,900);
-//		startpanel = new StartPanel(this,800, 900);
-//		c.add(startpanel);
 
-		//defaultFileOpen();
+		// setSize(800,900);
+		// startpanel = new StartPanel(this,800, 900);
+		// c.add(startpanel);
+
+		// defaultFileOpen();
 
 		// setResizable(false);
 		setVisible(true);
 	}
-	
-	public static void removeStartPanel(){
+
+	public static void removeStartPanel(int select) {
 		c.remove(startpanel);
+		mode = select;
+		if (mode == 1) { // 게임모드
+			frame.add(new GamePanel(800, 900));
+			frame.setSize(800, 900);
+		} else if(mode == 2) { // 편집모드
+			frame.add(new EditPanel(1100, 900));
+			frame.setSize(1100, 900);
+		}
 	}
 
 	public void defaultFileOpen() {
@@ -85,18 +99,18 @@ public class BlockGameFrame extends JFrame {
 		Node sizeNode = XMLReader.getNode(blockGameNode, XMLReader.E_SIZE);
 		w = XMLReader.getAttr(sizeNode, "w");
 		h = XMLReader.getAttr(sizeNode, "h");
-		setSize(Integer.parseInt(w), Integer.parseInt(h));
+		// setSize(Integer.parseInt(w), Integer.parseInt(h));
 
 		c.add(new GamePanel(xml.getGamePanelElement(), Integer.parseInt(w),
 				Integer.parseInt(h)));
-		
+
 		repaint();
 		// setContentPane(new GamePanel(xml.getGamePanelElement()));
 	}
 
 	public void FileSave(String filePath) {
 		XMLWriter xml = new XMLWriter(filePath, editPanel.getBlockList(), map);
-		
+
 	}
 
 	public void createMenu() {
@@ -165,7 +179,7 @@ public class BlockGameFrame extends JFrame {
 			mapEditDoalog.setVisible(true);
 		}
 	}
-	
+
 	public void createMapDialog() {
 		mapEditDoalog = new MapEditDialog(this, "Map Edit");
 	}
@@ -259,11 +273,13 @@ public class BlockGameFrame extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					String bgFilePath = bgTf.getText().toString();
 					String bgmFilePath = bgmTf.getText().toString();
-					
-					System.out.println(bgFilePath +", "+ bgmFilePath);
+
+					System.out.println(bgFilePath + ", " + bgmFilePath);
 					map.setBgImg(bgFilePath);
 					map.setBgSound(bgmFilePath);
-					
+
+					editPanel.mapPanel.setMap(map);
+
 					setVisible(false);
 				}
 			});
@@ -335,8 +351,8 @@ public class BlockGameFrame extends JFrame {
 						JFileChooser chooser = new JFileChooser();
 						chooser.setCurrentDirectory(new File("."));
 
-						FileNameExtensionFilter filter = new FileNameExtensionFilter("sound Files",
-								"mp3", "wma");
+						FileNameExtensionFilter filter = new FileNameExtensionFilter(
+								"sound Files", "mp3", "wma");
 
 						chooser.setFileFilter(filter);
 
